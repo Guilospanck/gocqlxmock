@@ -16,9 +16,9 @@ func Test_test(t *testing.T) {
 
 		session := &SessionxMock{}
 		queryMock := &QueryxMock{
-			ctx:   ctx,
-			stmt:  stmt,
-			names: names,
+			Ctx:   ctx,
+			Stmt:  stmt,
+			Names: names,
 		}
 
 		session.On("Query", stmt, names).Return(queryMock)
@@ -28,9 +28,9 @@ func Test_test(t *testing.T) {
 
 		session.AssertExpectations(t)
 		queryMock.AssertExpectations(t)
-		assert.Equal(t, stmt, result.(*QueryxMock).stmt)
-		assert.Equal(t, names, result.(*QueryxMock).names)
-		assert.Equal(t, ctx, result.(*QueryxMock).ctx)
+		assert.Equal(t, stmt, result.(*QueryxMock).Stmt)
+		assert.Equal(t, names, result.(*QueryxMock).Names)
+		assert.Equal(t, ctx, result.(*QueryxMock).Ctx)
 
 	})
 }
