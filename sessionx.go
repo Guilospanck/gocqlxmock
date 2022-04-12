@@ -3,6 +3,7 @@ package gocqlxmock
 import (
 	"context"
 
+	"github.com/gocql/gocql"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -12,8 +13,8 @@ type ISessionx interface {
 	ExecStmt(stmt string) error
 }
 
-/* ==================================================== */
 type SessionxMock struct {
+	*gocql.Session
 	mock.Mock
 }
 
