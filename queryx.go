@@ -33,6 +33,9 @@ type IQueryx interface {
 
 type QueryxMock struct {
 	mock.Mock
+	ctx   context.Context
+	stmt  string
+	names []string
 }
 
 func (mock *QueryxMock) WithBindTransformer(tr Transformer) IQueryx {

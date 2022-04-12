@@ -1,1 +1,2 @@
-# gocqlx-mock
+# gocqlxmock
+Simple mock for gocqlx.

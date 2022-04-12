@@ -10,25 +10,27 @@ import (
 func Test_test(t *testing.T) {
 	t.Run("test", func(t *testing.T) {
 
-		const insertStatement = `INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 08:05+0000','New York',1.0,3.0,17)`
-		insertNames := []string{"test"}
+		const stmt = `INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 08:05+0000','New York',1.0,3.0,17)`
+		names := []string{"test"}
+		ctx := context.Background()
 
 		session := &SessionxMock{}
-		session.On("Query", insertStatement, insertNames).Return(&Queryx{stmt: insertStatement, names: insertNames})
-
-		insertQuery := session.Query(insertStatement, insertNames).WithContext(context.Background())
-
-		// mock Queryx
-
-		type Test struct {
-			Name string
+		queryMock := &QueryxMock{
+			ctx:   ctx,
+			stmt:  stmt,
+			names: names,
 		}
 
-		test := &Test{}
+		session.On("Query", stmt, names).Return(queryMock)
+		queryMock.On("WithContext", context.Background()).Return(queryMock)
 
-		err := insertQuery.BindStruct(test).ExecRelease()
+		result := session.Query(stmt, names).WithContext(context.Background())
 
-		assert.Nil(t, err)
+		session.AssertExpectations(t)
+		queryMock.AssertExpectations(t)
+		assert.Equal(t, stmt, result.(*QueryxMock).stmt)
+		assert.Equal(t, names, result.(*QueryxMock).names)
+		assert.Equal(t, ctx, result.(*QueryxMock).ctx)
 
 	})
 }
