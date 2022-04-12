@@ -9,28 +9,30 @@ import (
 
 func Test_test(t *testing.T) {
 	t.Run("test", func(t *testing.T) {
-
+		// arrange
 		const stmt = `INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 08:05+0000','New York',1.0,3.0,17)`
 		names := []string{"test"}
 		ctx := context.Background()
 
-		session := &SessionxMock{}
 		queryMock := &QueryxMock{
 			Ctx:   ctx,
 			Stmt:  stmt,
 			Names: names,
 		}
+		queryMock.On("WithContext", ctx).Return(queryMock)
 
-		session.On("Query", stmt, names).Return(queryMock)
-		queryMock.On("WithContext", context.Background()).Return(queryMock)
+		sessionMock := &SessionxMock{}
+		sessionMock.On("Query", stmt, names).Return(queryMock)
 
-		result := session.Query(stmt, names).WithContext(context.Background())
+		// act
+		var session ISessionx = sessionMock
+		result := session.Query(stmt, names).WithContext(ctx)
 
-		session.AssertExpectations(t)
+		// assert
 		queryMock.AssertExpectations(t)
+		sessionMock.AssertExpectations(t)
 		assert.Equal(t, stmt, result.(*QueryxMock).Stmt)
-		assert.Equal(t, names, result.(*QueryxMock).Names)
 		assert.Equal(t, ctx, result.(*QueryxMock).Ctx)
-
+		assert.Equal(t, names, result.(*QueryxMock).Names)
 	})
 }

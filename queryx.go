@@ -3,6 +3,7 @@ package gocqlxmock
 import (
 	"context"
 
+	"github.com/gocql/gocql"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -38,122 +39,214 @@ type QueryxMock struct {
 	Names []string
 }
 
-func (mock *QueryxMock) WithBindTransformer(tr Transformer) IQueryx {
+func (mock QueryxMock) WithBindTransformer(tr Transformer) IQueryx {
 	args := mock.Called(tr)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *QueryxMock) BindStruct(arg interface{}) IQueryx {
+func (mock QueryxMock) BindStruct(arg interface{}) IQueryx {
 	args := mock.Called(arg)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *QueryxMock) BindStructMap(arg0 interface{}, arg1 map[string]interface{}) IQueryx {
+func (mock QueryxMock) BindStructMap(arg0 interface{}, arg1 map[string]interface{}) IQueryx {
 	args := mock.Called(arg0, arg1)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *QueryxMock) bindStructArgs(arg0 interface{}, arg1 map[string]interface{}) ([]interface{}, error) {
+func (mock QueryxMock) bindStructArgs(arg0 interface{}, arg1 map[string]interface{}) ([]interface{}, error) {
 	args := mock.Called(arg0, arg1)
 
 	return args.Get(0).([]interface{}), args.Error(1)
 }
 
-func (mock *QueryxMock) BindMap(arg map[string]interface{}) IQueryx {
+func (mock QueryxMock) BindMap(arg map[string]interface{}) IQueryx {
 	args := mock.Called(arg)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *QueryxMock) bindMapArgs(arg map[string]interface{}) ([]interface{}, error) {
+func (mock QueryxMock) bindMapArgs(arg map[string]interface{}) ([]interface{}, error) {
 	args := mock.Called(arg)
 
 	return args.Get(0).([]interface{}), args.Error(1)
 }
 
-func (mock *QueryxMock) Bind(v ...interface{}) IQueryx {
+func (mock QueryxMock) Bind(v ...interface{}) IQueryx {
 	args := mock.Called(v)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *QueryxMock) Err() error {
+func (mock QueryxMock) Err() error {
 	args := mock.Called()
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) Exec() error {
+func (mock QueryxMock) Exec() error {
 	args := mock.Called()
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) ExecRelease() error {
+func (mock QueryxMock) ExecRelease() error {
 	args := mock.Called()
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) ExecCAS() (applied bool, err error) {
-	args := mock.Called()
-
-	return args.Get(0).(bool), args.Error(1)
-}
-
-func (mock *QueryxMock) ExecCASRelease() (bool, error) {
+func (mock QueryxMock) ExecCAS() (applied bool, err error) {
 	args := mock.Called()
 
 	return args.Get(0).(bool), args.Error(1)
 }
 
-func (mock *QueryxMock) Get(dest interface{}) error {
+func (mock QueryxMock) ExecCASRelease() (bool, error) {
+	args := mock.Called()
+
+	return args.Get(0).(bool), args.Error(1)
+}
+
+func (mock QueryxMock) Get(dest interface{}) error {
 	args := mock.Called(dest)
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) GetRelease(dest interface{}) error {
+func (mock QueryxMock) GetRelease(dest interface{}) error {
 	args := mock.Called(dest)
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) GetCAS(dest interface{}) (applied bool, err error) {
+func (mock QueryxMock) GetCAS(dest interface{}) (applied bool, err error) {
 	args := mock.Called(dest)
 
 	return args.Get(0).(bool), args.Error(1)
 }
 
-func (mock *QueryxMock) GetCASRelease(dest interface{}) (bool, error) {
+func (mock QueryxMock) GetCASRelease(dest interface{}) (bool, error) {
 	args := mock.Called(dest)
 
 	return args.Get(0).(bool), args.Error(1)
 }
 
-func (mock *QueryxMock) Select(dest interface{}) error {
+func (mock QueryxMock) Select(dest interface{}) error {
 	args := mock.Called(dest)
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) SelectRelease(dest interface{}) error {
+func (mock QueryxMock) SelectRelease(dest interface{}) error {
 	args := mock.Called(dest)
 
 	return args.Error(0)
 }
 
-func (mock *QueryxMock) Iter() IIterx {
+func (mock QueryxMock) Iter() IIterx {
 	args := mock.Called()
 
 	return args.Get(0).(IIterx)
 }
 
-func (mock *QueryxMock) WithContext(ctx context.Context) IQueryx {
+func (mock QueryxMock) WithContext(ctx context.Context) IQueryx {
 	args := mock.Called(ctx)
 
 	return args.Get(0).(IQueryx)
+}
+
+// "Interface assertion"
+var (
+	_ IQueryx = QueryxMock{}
+	_ IQueryx = queryx{}
+)
+
+type queryx struct {
+	q *gocql.Query
+}
+
+func (q queryx) WithBindTransformer(tr Transformer) IQueryx {
+	return q
+}
+
+func (q queryx) BindStruct(arg interface{}) IQueryx {
+	return q
+}
+
+func (q queryx) BindStructMap(arg0 interface{}, arg1 map[string]interface{}) IQueryx {
+	return q
+}
+
+func (q queryx) bindStructArgs(arg0 interface{}, arg1 map[string]interface{}) ([]interface{}, error) {
+	return nil, nil
+}
+
+func (q queryx) BindMap(arg map[string]interface{}) IQueryx {
+	return q
+}
+
+func (q queryx) bindMapArgs(arg map[string]interface{}) ([]interface{}, error) {
+	return nil, nil
+}
+
+func (q queryx) Bind(v ...interface{}) IQueryx {
+	return q
+}
+
+func (q queryx) Err() error {
+	return nil
+}
+
+func (q queryx) Exec() error {
+	return nil
+}
+
+func (q queryx) ExecRelease() error {
+	return nil
+}
+
+func (q queryx) ExecCAS() (applied bool, err error) {
+	return true, nil
+}
+
+func (q queryx) ExecCASRelease() (bool, error) {
+	return true, nil
+}
+
+func (q queryx) Get(dest interface{}) error {
+	return nil
+}
+
+func (q queryx) GetRelease(dest interface{}) error {
+	return nil
+}
+
+func (q queryx) GetCAS(dest interface{}) (applied bool, err error) {
+	return true, nil
+}
+
+func (q queryx) GetCASRelease(dest interface{}) (bool, error) {
+	return true, nil
+}
+
+func (q queryx) Select(dest interface{}) error {
+	return nil
+}
+
+func (q queryx) SelectRelease(dest interface{}) error {
+	return nil
+}
+
+func (q queryx) Iter() IIterx {
+	return iterx{
+		i: q.q.Iter(),
+	}
+}
+
+func (q queryx) WithContext(ctx context.Context) IQueryx {
+	return q
 }

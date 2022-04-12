@@ -14,24 +14,49 @@ type ISessionx interface {
 }
 
 type SessionxMock struct {
-	*gocql.Session
 	mock.Mock
 }
 
-func (mock *SessionxMock) ContextQuery(ctx context.Context, stmt string, names []string) IQueryx {
+func (mock SessionxMock) ContextQuery(ctx context.Context, stmt string, names []string) IQueryx {
 	args := mock.Called(ctx, stmt, names)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *SessionxMock) Query(stmt string, names []string) IQueryx {
+func (mock SessionxMock) Query(stmt string, names []string) IQueryx {
 	args := mock.Called(stmt, names)
 
 	return args.Get(0).(IQueryx)
 }
 
-func (mock *SessionxMock) ExecStmt(stmt string) error {
+func (mock SessionxMock) ExecStmt(stmt string) error {
 	args := mock.Called(stmt)
 
 	return args.Error(0)
+}
+
+// "Interface assertion"
+var (
+	_ ISessionx = SessionxMock{}
+	_ ISessionx = sessionx{}
+)
+
+type sessionx struct {
+	s *gocql.Session
+}
+
+func (s sessionx) ContextQuery(ctx context.Context, stmt string, names []string) IQueryx {
+	return queryx{
+		q: s.s.Query(stmt, names).WithContext(ctx),
+	}
+}
+
+func (s sessionx) Query(stmt string, names []string) IQueryx {
+	return queryx{
+		q: s.s.Query(stmt, names),
+	}
+}
+
+func (s sessionx) ExecStmt(stmt string) error {
+	return s.s.Query(stmt).Exec()
 }
