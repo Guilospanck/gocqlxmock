@@ -14,41 +14,41 @@ In an application that is using `igocqlx` as a wrapper for `gocqlx`, you can do 
 ```go
 // query_builder.go
 type queryBuilder struct {
-	model   igocqlxtable.ITable
-	session igocqlx.ISessionx
-	logger  interfaces.ILogger
+  model   igocqlxtable.ITable
+  session igocqlx.ISessionx
+  logger  interfaces.ILogger
 }
 
 func NewQueryBuider(model igocqlxtable.ITable, session igocqlx.ISessionx, logger interfaces.ILogger) *queryBuilder {
-	return &queryBuilder{
-		model,
-		session,
-		logger,
-	}
+  return &queryBuilder{
+    model,
+    session,
+    logger,
+  }
 }
 
 func (queryBuilder *queryBuilder) Insert(ctx context.Context, insertData *entities.TrackingData) error {
-	insertStatement, insertNames := queryBuilder.model.Insert()
-	insertQuery := queryBuilder.session.Query(insertStatement, insertNames).WithContext(ctx)
+  insertStatement, insertNames := queryBuilder.model.Insert()
+  insertQuery := queryBuilder.session.Query(insertStatement, insertNames).WithContext(ctx)
 
-	err := insertQuery.BindStruct(insertData).ExecRelease()
-	if err != nil {
-		queryBuilder.logger.Error(fmt.Sprintf("Insert() error %s", err.Error()))
-		return err
-	}
+  err := insertQuery.BindStruct(insertData).ExecRelease()
+  if err != nil {
+    queryBuilder.logger.Error(fmt.Sprintf("Insert() error %s", err.Error()))
+    return err
+  }
 
-	return nil
+  return nil
 }
 ```
 
 ```go
 // query_builder_test.go
 func Test_Insert(t *testing.T) {
-	t.Run("Should insert data and have no error", func(t *testing.T) {
-		// arrange
-		stmt := `INSERT INTO tracking_data (first_name,last_name,timestamp,heat,location,speed,telepathy_powers) VALUES (?,?,?,?,?,?,?) `
-		names := []string{"first_name", "last_name", "timestamp", "heat", "location", "speed", "telepathy_powers"}
-	  ctx := context.Background()
+  t.Run("Should insert data and have no error", func(t *testing.T) {
+    // arrange
+    stmt := `INSERT INTO tracking_data (first_name,last_name,timestamp,heat,location,speed,telepathy_powers) VALUES (?,?,?,?,?,?,?) `
+    names := []string{"first_name", "last_name", "timestamp", "heat", "location", "speed", "telepathy_powers"}
+    ctx := context.Background()
 
 
     trackingModel := models.NewTrackingDataTable().Table
@@ -62,26 +62,26 @@ func Test_Insert(t *testing.T) {
 
     queryBuilder := NewQueryBuider(trackingModel, sessionMock, loggerSpy)
 
-		sessionMock.On("Query", stmt, names).Return(queryMock)
-		queryMock.On("WithContext", context.Background()).Return(queryMock)
-		queryMock.On("BindStruct", &mocks.CompleteDataEntity).Return(queryMock)
-		queryMock.On("ExecRelease").Return(nil)
+    sessionMock.On("Query", stmt, names).Return(queryMock)
+    queryMock.On("WithContext", context.Background()).Return(queryMock)
+    queryMock.On("BindStruct", &mocks.CompleteDataEntity).Return(queryMock)
+    queryMock.On("ExecRelease").Return(nil)
 
-		// act
-		err := queryBuilder.Insert(ctx, &mocks.CompleteDataEntity)
+    // act
+    err := queryBuilder.Insert(ctx, &mocks.CompleteDataEntity)
 
-		// assert
-		assert.NoError(t, err)
-		sessionMock.AssertExpectations(t)
-		sessionMock.AssertNumberOfCalls(t, "Query", 1)
-		queryMock.AssertNumberOfCalls(t, "WithContext", 1)
-		queryMock.AssertNumberOfCalls(t, "BindStruct", 1)
-		queryMock.AssertNumberOfCalls(t, "ExecRelease", 1)
-		sessionMock.AssertCalled(t, "Query", stmt, names)
-		queryMock.AssertCalled(t, "WithContext", context.Background())
-		queryMock.AssertCalled(t, "BindStruct", &mocks.CompleteDataEntity)
-		queryMock.AssertCalled(t, "ExecRelease")
-	})
+    // assert
+    assert.NoError(t, err)
+    sessionMock.AssertExpectations(t)
+    sessionMock.AssertNumberOfCalls(t, "Query", 1)
+    queryMock.AssertNumberOfCalls(t, "WithContext", 1)
+    queryMock.AssertNumberOfCalls(t, "BindStruct", 1)
+    queryMock.AssertNumberOfCalls(t, "ExecRelease", 1)
+    sessionMock.AssertCalled(t, "Query", stmt, names)
+    queryMock.AssertCalled(t, "WithContext", context.Background())
+    queryMock.AssertCalled(t, "BindStruct", &mocks.CompleteDataEntity)
+    queryMock.AssertCalled(t, "ExecRelease")
+  })
 }
 ```
 
