@@ -13,7 +13,8 @@ require (
 )
 
 require (
-	github.com/golang/snappy v0.0.3 // indirect
+	github.com/Guilospanck/igocqlx v0.0.7
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
 	github.com/scylladb/gocqlx/v2 v2.7.0
 	github.com/stretchr/testify v1.7.1
