@@ -273,3 +273,37 @@ func Test_Queryx_ExecRelease(t *testing.T) {
 		assert.Error(t, result, sut.errMsg)
 	})
 }
+
+func Test_Queryx_ExecCAS(t *testing.T) {
+	t.Run("Should call ExecCAS with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("ExecCAS").Return(sut.boolVar, nil)
+
+		// act
+		result, err := sut.queryxmock.ExecCAS()
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "ExecCAS")
+		sut.queryxmock.AssertNumberOfCalls(t, "ExecCAS", 1)
+		assert.NoError(t, err)
+		assert.Equal(t, sut.boolVar, result)
+	})
+
+	t.Run("Should call ExecCAS with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("ExecCAS").Return(sut.boolVar, sut.err)
+
+		// act
+		result, err := sut.queryxmock.ExecCAS()
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "ExecCAS")
+		sut.queryxmock.AssertNumberOfCalls(t, "ExecCAS", 1)
+		assert.Error(t, err, sut.errMsg)
+		assert.Equal(t, sut.boolVar, result)
+	})
+}
