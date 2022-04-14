@@ -375,3 +375,246 @@ func Test_Queryx_Get(t *testing.T) {
 		assert.Error(t, err, sut.errMsg)
 	})
 }
+
+func Test_Queryx_GetRelease(t *testing.T) {
+	t.Run("Should call GetRelease with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetRelease", arg).Return(nil)
+
+		// act
+		err := sut.queryxmock.GetRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetRelease", 1)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call GetRelease with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetRelease", arg).Return(sut.err)
+
+		// act
+		err := sut.queryxmock.GetRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetRelease", 1)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
+
+func Test_Queryx_GetCAS(t *testing.T) {
+	t.Run("Should call GetCAS with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetCAS", arg).Return(sut.boolVar, nil)
+
+		// act
+		result, err := sut.queryxmock.GetCAS(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetCAS", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetCAS", 1)
+		assert.Equal(t, sut.boolVar, result)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call GetCAS with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetCAS", arg).Return(sut.boolVar, sut.err)
+
+		// act
+		result, err := sut.queryxmock.GetCAS(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetCAS", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetCAS", 1)
+		assert.Equal(t, sut.boolVar, result)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
+
+func Test_Queryx_GetCASRelease(t *testing.T) {
+	t.Run("Should call GetCASRelease with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetCASRelease", arg).Return(sut.boolVar, nil)
+
+		// act
+		result, err := sut.queryxmock.GetCASRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetCASRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetCASRelease", 1)
+		assert.Equal(t, sut.boolVar, result)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call GetCASRelease with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("GetCASRelease", arg).Return(sut.boolVar, sut.err)
+
+		// act
+		result, err := sut.queryxmock.GetCASRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "GetCASRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "GetCASRelease", 1)
+		assert.Equal(t, sut.boolVar, result)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
+
+func Test_Queryx_Select(t *testing.T) {
+	t.Run("Should call Select with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("Select", arg).Return(nil)
+
+		// act
+		err := sut.queryxmock.Select(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Select", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "Select", 1)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call Select with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("Select", arg).Return(sut.err)
+
+		// act
+		err := sut.queryxmock.Select(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Select", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "Select", 1)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
+
+func Test_Queryx_SelectRelease(t *testing.T) {
+	t.Run("Should call SelectRelease with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("SelectRelease", arg).Return(nil)
+
+		// act
+		err := sut.queryxmock.SelectRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "SelectRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "SelectRelease", 1)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call SelectRelease with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("SelectRelease", arg).Return(sut.err)
+
+		// act
+		err := sut.queryxmock.SelectRelease(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "SelectRelease", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "SelectRelease", 1)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
+
+func Test_Queryx_Iter(t *testing.T) {
+	t.Run("Should call Iter with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("Iter").Return(sut.iterxmock)
+
+		// act
+		result := sut.queryxmock.Iter()
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Iter")
+		sut.queryxmock.AssertNumberOfCalls(t, "Iter", 1)
+		assert.Equal(t, sut.iterxmock, result)
+	})
+}
+
+func Test_Queryx_Consistency(t *testing.T) {
+	t.Run("Should call Consistency with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("Consistency", sut.consistency).Return(sut.queryxmock)
+
+		// act
+		result := sut.queryxmock.Consistency(sut.consistency)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Consistency", sut.consistency)
+		sut.queryxmock.AssertNumberOfCalls(t, "Consistency", 1)
+		assert.Equal(t, sut.queryxmock, result)
+	})
+}
+
+func Test_Queryx_CustomPayload(t *testing.T) {
+	t.Run("Should call CustomPayload with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		customPayload := makeCustomPayload("potato")
+		sut.queryxmock.On("CustomPayload", customPayload).Return(sut.queryxmock)
+
+		// act
+		result := sut.queryxmock.CustomPayload(customPayload)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "CustomPayload", customPayload)
+		sut.queryxmock.AssertNumberOfCalls(t, "CustomPayload", 1)
+		assert.Equal(t, sut.queryxmock, result)
+	})
+}
+
+func Test_Queryx_Trace(t *testing.T) {
+	t.Run("Should call Trace with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("Trace", sut.trace).Return(sut.queryxmock)
+
+		// act
+		result := sut.queryxmock.Trace(sut.trace)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Trace", sut.trace)
+		sut.queryxmock.AssertNumberOfCalls(t, "Trace", 1)
+		assert.Equal(t, sut.queryxmock, result)
+	})
+}
