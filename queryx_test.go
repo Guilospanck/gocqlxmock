@@ -307,3 +307,71 @@ func Test_Queryx_ExecCAS(t *testing.T) {
 		assert.Equal(t, sut.boolVar, result)
 	})
 }
+
+func Test_Queryx_ExecCASRelease(t *testing.T) {
+	t.Run("Should call ExecCASRelease with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("ExecCASRelease").Return(sut.boolVar, nil)
+
+		// act
+		result, err := sut.queryxmock.ExecCASRelease()
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "ExecCASRelease")
+		sut.queryxmock.AssertNumberOfCalls(t, "ExecCASRelease", 1)
+		assert.NoError(t, err)
+		assert.Equal(t, sut.boolVar, result)
+	})
+
+	t.Run("Should call ExecCASRelease with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		sut.queryxmock.On("ExecCASRelease").Return(sut.boolVar, sut.err)
+
+		// act
+		result, err := sut.queryxmock.ExecCASRelease()
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "ExecCASRelease")
+		sut.queryxmock.AssertNumberOfCalls(t, "ExecCASRelease", 1)
+		assert.Error(t, err, sut.errMsg)
+		assert.Equal(t, sut.boolVar, result)
+	})
+}
+
+func Test_Queryx_Get(t *testing.T) {
+	t.Run("Should call Get with proper parameters and return proper result", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("Get", arg).Return(nil)
+
+		// act
+		err := sut.queryxmock.Get(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Get", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "Get", 1)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Should call Get with proper parameters and return err", func(t *testing.T) {
+		// arrange
+		sut := makeQueryxSut()
+		arg := makeArg("potato")
+		sut.queryxmock.On("Get", arg).Return(sut.err)
+
+		// act
+		err := sut.queryxmock.Get(arg)
+
+		// assert
+		sut.queryxmock.AssertExpectations(t)
+		sut.queryxmock.AssertCalled(t, "Get", arg)
+		sut.queryxmock.AssertNumberOfCalls(t, "Get", 1)
+		assert.Error(t, err, sut.errMsg)
+	})
+}
