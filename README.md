@@ -1,4 +1,4 @@
-# gocqlxmock [![Go Report Card](https://goreportcard.com/badge/github.com/Guilospanck/gocqlxmock)](https://goreportcard.com/report/github.com/Guilospanck/gocqlxmock) [![CircleCI](https://circleci.com/gh/Guilospanck/gocqlxmock/tree/main.svg?style=svg)](https://circleci.com/gh/Guilospanck/gocqlxmock/tree/main)
+# gocqlxmock [![Go Report Card](https://goreportcard.com/badge/github.com/Guilospanck/gocqlxmock)](https://goreportcard.com/report/github.com/Guilospanck/gocqlxmock) [![CircleCI](https://circleci.com/gh/Guilospanck/gocqlxmock/tree/main.svg?style=svg)](https://circleci.com/gh/Guilospanck/gocqlxmock/tree/main) [![codecov](https://codecov.io/gh/Guilospanck/gocqlxmock/branch/main/graph/badge.svg?token=VN0PUVFVMY)](https://codecov.io/gh/Guilospanck/gocqlxmock)
 
 Simple mock for [`gocqlx`](https://github.com/scylladb/gocqlx). As `gocqlx` doesn't provide interfaces for its methods and functions in order to make the mock possible, we're using `igocqlx`, which is a wrapper around `gocqlx` that provides interfaces. 
 
